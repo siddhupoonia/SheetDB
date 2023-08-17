@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="index.css">
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous">
+</script>
+<script>
+    function displayModal(message) {
+        var overlay = document.querySelector('.overlay');
+        var modal = document.querySelector('.modal');
+        var modalContent = document.querySelector('.modal-content');
+
+        modalContent.innerHTML = message;
+        overlay.style.display = 'flex';
+
+        var okButton = document.createElement('button');
+        okButton.textContent = 'OK';
+        okButton.addEventListener('click', function() {
+            overlay.style.display = 'none';
+        });
+
+        modalContent.appendChild(document.createElement('br'));
+        modalContent.appendChild(okButton);
+    }
+
+    function Form() {
+      var nameInput = document.querySelector('input[name="name"]');
+      var mobileInput = document.querySelector('input[name="mobile_number"]');
+      
+      var nameValue = nameInput.value;
+      var mobileValue = mobileInput.value;
+      
+      var namePattern = /^[A-Za-z\s]+$/; 
+      var mobilePattern = /^[0-9]+$/; 
+      
+      var nameValid = namePattern.test(nameValue);
+      var mobileValid = mobilePattern.test(mobileValue);
+      
+      if (!nameValid) {
+        displayModal('Please enter a valid name (only alphabets and spaces are allowed).');
+        nameInput.focus();
+        return false;
+      }
+      
+      if (!mobileValid) {
+        displayModal('Please enter a valid mobile number (only numerical values are allowed).');
+        mobileInput.focus();
+        return false;
+      }
+      $.ajax({
+        url:'https://api.apispreadsheets.com/data/2BVCzD2vUe6iXYFN/',
+        type:'post',
+        data:$("#myForm").serializeArray(),
+        success: function(){
+            displayModal('Data Submitted!');
+        },
+        error: function(){
+            displayModal('Data Submitted!');
+        }
+        });
+    }
+</script>
+</head>
+<body>
+    <div class="overlay">
+        <div class="modal">
+          <div class="modal-content"></div>
+        </div>
+    </div>
+    <h2>Please enter Name and Mobile number to continue:</h2>
+    <form id="myForm">
+        <label>Name</label>
+        <br/>
+        <input name="name" />
+        <br/>
+        <label>Mobile No</label>
+        <br/>
+        <input name="mobile_number" />
+        <br/>
+        <br/>
+    </form>
+    <button onclick="Form()">Submit</button> 
+</body>
+</html>
